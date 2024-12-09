@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import demo.ssf_practice_workshop.model.Todo;
 import demo.ssf_practice_workshop.repo.RedisRepo;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 @Controller
@@ -29,8 +30,35 @@ public class TodoController {
     @Autowired
     RedisRepo repo;
 
+    @GetMapping("")
+    public String landingPage(Model model){
+        return "login";
+    }
+
+    @PostMapping("/login")
+    public String login(@RequestParam("name") String name, @RequestParam("age") Integer age, HttpSession session){
+        session.setAttribute("name", name);
+        session.setAttribute("age", age);
+
+        if (age >= 10){
+            return "redirect:/todo/list";
+        } else {
+            return "underage";
+        }
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpSession session){
+        session.getAttribute("name");
+        return "logout";
+    }
+
     @GetMapping("/list")
-    public String todoList(@RequestParam(required = false) String status, Model model) {
+    public String todoList(@RequestParam(required = false) String status, HttpSession session, Model model) {
+        if (session.getAttribute("name") == null || session.getAttribute("age") == null){
+            return "refused";
+        }
+
         List<Todo> todos = repo.getAll();
         
         if (status != null && !status.isEmpty()) {
@@ -42,7 +70,7 @@ public class TodoController {
         model.addAttribute("todos", todos);
         model.addAttribute("selectedStatus", status);
         model.addAttribute("statusOptions", 
-            Arrays.asList("Pending", "Progress", "Completed"));
+            Arrays.asList("Pending", "In_Progress", "Completed"));
         
         return "list";
     }

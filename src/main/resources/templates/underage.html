@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Underage Error</title>
+</head>
+<body>
+    <h1>Error</h1>
+    <h2>Sorry <span th:text="${session.name}"></span>, your age is 
+    <span th:text="${session.age}"></span>, you are underage</h2>
+</body>
+</html>

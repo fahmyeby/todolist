@@ -9,14 +9,17 @@
 <body>
     <div class="container mt-3">
         <h2>Todo List</h2>
-        
+         <h3>Welcome, <span th:text="${session.name}"></span>!</h3>
         <div class="mb-3">
             <a class="btn btn-primary" th:href="@{/todo/create}">Add New</a>
+        </div>
+        <div class="mb-3">
+            <a class="btn btn-primary" th:href="@{/todo/logout}">Logout</a>
         </div>
 
         <form th:action="@{/todo/list}" method="get" class="mb-3">
             <select name="status" class="form-select w-25 d-inline-block">
-                <option value="">All Status</option>
+                <option value="">Filter Options</option>
                 <option th:each="status : ${statusOptions}"
                         th:value="${status}"
                         th:text="${status}"
@@ -24,7 +27,7 @@
                 </option>
             </select>
             <button type="submit" class="btn btn-primary">Filter</button>
-            <a th:href="@{/todo/list}" class="btn btn-secondary">Clear</a>
+            <a th:href="@{/todo/list}" class="btn btn-secondary">Clear Filters</a>
         </form>
 
         <table class="table">
